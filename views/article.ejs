@@ -1,0 +1,60 @@
+<%- include header %>
+
+<!--START edit/delete button  -->
+<% if (user && user.name == post.name) { %>
+<span><a class="edit" href="/edit/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">edit</a></span>
+<span><a class="edit" href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">delete</a></span>
+<% } %>
+<!--END edit/delete button  -->
+
+<!--START reprint button  -->
+<% var flag = 1 %>
+<% if (user && (user.name != post.name) ) { %>
+	<% if ( (post.reprint_info.reprint_from != undefined) && (user.name == post.reprint_info.reprint_from.name) ) { %>
+		<% flag = 0 %>
+	<% } %>
+	<% if ( (post.reprint_info.reprint_to!= undefined) ) { %>
+		<% post.reprint_info.reprint_to.forEach(function(reprint_to, index){ %>
+			<% if (reprint_to.name == user.name) { %>
+				<% flag = 0 %>
+			<% } %>	
+		<% }) %>
+	<% } %>	
+<% } else { %>
+	<% flag = 0 %>
+<% } %>
+<% if (flag) { %>
+	<span><a class="edit" href="/reprint/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">reprint</a></span>
+<% } %>
+<!--START reprint button  -->
+
+<p class="info">
+	"Author:"<a href="/u/<%= post.name %>"><%= post.name %></a> | 
+	"Date:"<%= post.time.minute %>|
+	"Tags:"
+	<% if(post.tags){ %>
+	<% post.tags.forEach(function(tag, index){ %>
+	<% if(tag){ %>
+	<a class="tag" href="/tags/<%= tag %>"><%= tag %></a>
+	<% } %>
+	<% }) %>
+	<% } %>
+	<% if (post.reprint_info && post.reprint_info.reprint_from) { %>
+		<br />
+		<a href="/u/<%= post.reprint_info.reprint_from.name %>/<%= post.reprint_info.reprint_from.day %>/<%= post.reprint_info.reprint_from.title %>">Original</a>
+	<% } %>	
+</p>
+<p><%- post.post %></p>
+<p class="info">
+	Read: <%= post.pv %> |
+	Comment: <%= post.comments.length %> |
+	Reprint: 
+	<% if (post.reprint_info && post.reprint_info.reprint_to){ %>
+		<%= post.reprint_info.reprint_to.length %>
+	<% } else { %>
+		<%= 0 %>
+	<% } %>
+</p>
+
+<%- include comment %>
+<%- include footer %>
