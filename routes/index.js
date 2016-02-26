@@ -15,7 +15,7 @@ Post = require('../models/post');
 Comment = require('../models/comment');
 
 module.exports = function(app){
-	
+	/*
 	app.get('/', function(req, res, next) {
 		var page = req.query.p ? parseInt(req.query.p) : 1;
 		
@@ -37,6 +37,7 @@ module.exports = function(app){
 		});
 
 	});
+	*/
 	
 	app.get('/login', checkNotLogin);
 	app.get('/login', function(req, res, next) {
